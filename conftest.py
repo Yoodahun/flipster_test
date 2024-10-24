@@ -1,7 +1,9 @@
-import time
+
 import allure
 import pytest
 from allure_commons.types import AttachmentType
+from src.android.pages.market_page import MarketPage
+from src.android.pages.login_page import LoginPage
 
 from utilities import driver_factory
 from selenium.webdriver.remote import webdriver
@@ -17,18 +19,11 @@ def pytest_addoption(parser):
     :return:
     """
     parser.addoption(
-        "--platform", default="pc_web", action="store", help="pc/android/ios/android_chrome/ios_safari"
+        "--platform", default="android", action="store", help="android/ios"
     )
 
-@pytest.fixture(scope="session")
-def print_for_testcase(request) -> str:
-    platform = request.config.getoption('platform').upper()
 
-    print("this is fixture method for session-----")
-
-    return platform
-
-@pytest.fixture(scope="class", autouse=True)
+@pytest.fixture(scope="function", autouse=True)
 def setup_and_teardown(request) -> webdriver:
     """
     driver 객체를 생성하고, 삭제합니다.
@@ -41,16 +36,27 @@ def setup_and_teardown(request) -> webdriver:
 
     driver = driver_factory(platform)
 
-    if platform in ("pc_web", "android_chrome", "ios_safari"):
-        driver.get("https://www.naver.com")
-
     request.cls.driver = driver
 
     yield
 
+    driver.terminate_app(driver.capabilities["appPackage"])
     driver.quit()
-    driver = None
-    time.sleep(1)
+
+    request.cls.driver = None
+
+@pytest.fixture(scope="function")
+def move_to_create_account_page(request):
+    """
+    계정생성페이지 까지 이동하는 픽스쳐
+    """
+    driver = request.cls.driver
+
+    market_page = MarketPage(driver)
+    login_page = LoginPage(driver)
+
+    market_page.click_asset_tab()
+    login_page.click_label_get_started()
 
 
 def pytest_runtest_makereport(item, call):

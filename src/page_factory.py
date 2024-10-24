@@ -1,3 +1,4 @@
+import inspect
 import re
 from typing import List
 
@@ -24,7 +25,7 @@ class PageFactory:
         self.action = ActionChains(self.driver)
         self.logger = logger_factory(type(self).__name__)
 
-    def _find_element(self, locator: tuple) -> WebElement:
+    def find_element(self, locator: tuple) -> WebElement:
         """
         find_element를 수행하여 element를 return합니다.
 
@@ -33,7 +34,7 @@ class PageFactory:
         """
         return self.driver.find_element(*locator)
 
-    def _find_elements(self, locator: tuple) -> List[WebElement]:
+    def find_elements(self, locator: tuple) -> List[WebElement]:
         """
         find_elements를 수행하여 list형태의 element들을 리턴합니다.
         :param locator:
@@ -41,7 +42,7 @@ class PageFactory:
         """
         return self.driver.find_elements(*locator)
 
-    def _find_element_for_wait(self, locator: tuple) -> WebElement:
+    def find_element_for_wait(self, locator: tuple) -> WebElement:
         """
         wait를 이용하여 element를 식별하고, 리턴합니다.
         대기시간은 10초이며 조건은 visibility_of_element_located() 입니다.
@@ -50,7 +51,7 @@ class PageFactory:
         """
         return self.wait.until(EC.visibility_of_element_located(locator))
 
-    def _find_elements_for_wait(self, locator: tuple) -> List[WebElement]:
+    def find_elements_for_wait(self, locator: tuple) -> List[WebElement]:
         """
         wait를 이용하여 element를 식별하고, 찾아낸 element들을 list에 담아 리턴합니다.
         대기시간은 10초이며 조건은 visibility_of_elements_located() 입니다.
@@ -59,16 +60,18 @@ class PageFactory:
         """
         return self.wait.until(EC.visibility_of_all_elements_located(locator))
 
-    def _get_text(self, locator: tuple) -> str:
+    def get_text(self, locator: tuple) -> str:
         """
         wait를 이용하여 element를 식별한다음, text를 리턴합니다.
 
         :param locator:
         :return: str
         """
-        return self._find_element_for_wait(locator).text
+        calling_method = inspect.stack()[1].function
+        self.logger.info(f"{calling_method} 실행")
+        return self.find_element_for_wait(locator).text
 
-    def _input(self, locator: tuple, text: str):
+    def input(self, locator: tuple, text: str):
         """
         wait를 이용하여 element를 식별한 다음, 텍스트값을 입력합니다.
         이때 입력하기 전에, 입력해야하는 element에 대해 clear() 동작을 수행합니다.
@@ -77,19 +80,25 @@ class PageFactory:
         :param text:
         :return:
         """
-        input_element = self._find_element_for_wait(locator)
+        calling_method = inspect.stack()[1].function
+        self.logger.info(f"{calling_method} 실행")
+
+        input_element = self.find_element_for_wait(locator)
         input_element.clear()
         input_element.send_keys(text)
 
-    def _click(self, locator: tuple):
+    def click(self, locator: tuple):
         """
         wait를 이용하여 element를 식별한다음, click()을 수행합니다.
         :param locator:
         :return:
         """
-        self._find_element_for_wait(locator).click()
+        calling_method = inspect.stack()[1].function
+        self.logger.info(f"{calling_method} 실행")
 
-    def _is_visible(self, locator: tuple) -> bool:
+        self.find_element_for_wait(locator).click()
+
+    def is_visible(self, locator: tuple) -> bool:
         """
         wait를 이용하여 element를 식별한다음 is_displayed()를 수행합니다.
         TimeoutException이 발생하는 경우에는 False를 리턴합니다.
@@ -97,8 +106,11 @@ class PageFactory:
         :param locator:
         :return: bool
         """
+        calling_method = inspect.stack()[1].function
+        self.logger.info(f"{calling_method} 실행")
+
         try:
-            return self._find_element_for_wait(locator).is_displayed()
+            return self.find_element_for_wait(locator).is_displayed()
         except TimeoutException:
             return False
 
@@ -109,7 +121,7 @@ class PageFactory:
         :param locator:
         :return: selenium.webdriver.support.select.Select
         """
-        return Select(self._find_element_for_wait(locator))
+        return Select(self.find_element_for_wait(locator))
 
     def _scroll_up_on_mobile(self, start_position: float = 0.7, end_position: float = 0.3):
         """
@@ -128,7 +140,7 @@ class PageFactory:
 
         self.driver.swipe(start_x, start_y, start_x, end_y, 600)
 
-    def _scroll_down_on_mobile(self, start_position: float = 0.7, end_position: float = 0.3):
+    def scroll_down_on_mobile(self, start_position: float = 0.7, end_position: float = 0.3):
         """
         모바일단말기의 화면에서, 단말기의 윈도우사이즈를 계산한다음 화면을 위로 스크롤합니다.
         기본값은 시작위치는 화면 상단으로부터 30%아래에 위치한 부분, 종료위치는 화면 상단으로부터 70% 아래에 위치한 부분입니다.
@@ -152,7 +164,7 @@ class PageFactory:
         :param locator:
         :return:
         """
-        element = self._find_element_for_wait(locator)
+        element = self.find_element_for_wait(locator)
         self.driver.execute_script("arguments[0].click();", element)
 
     def _change_window_taps(self, tap_index: int):
