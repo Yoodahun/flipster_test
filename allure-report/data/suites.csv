@@ -1,0 +1,39 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"passed","Thu Oct 24 21:58:42 KST 2024","Thu Oct 24 21:58:46 KST 2024","4294","tests.android","test_create_account","TestCreateAccount","","","test_001","
+        앱 시작 후 asset > 계정 만들기 > 계정 생성 페이지 이동
+
+        계정 생성 페이지 헤더가 제대로 노출되는지를 확인.
+        "
+"passed","Thu Oct 24 21:59:13 KST 2024","Thu Oct 24 21:59:17 KST 2024","3398","tests.android","test_create_account","TestCreateAccount","","","test_003","
+        계정 생성 페이지 > 패스워드 문자 validation 확인
+
+        Test step
+        1. 문자 입력 전 number validation label 캡쳐
+        2. 문자 ""1"" 입력
+        3. 2번 스텝 후 number validation label 캡쳐
+
+        Expected result
+        두 캡쳐를 비교해서 달라진 것을 확인하여 색상이 변한 것을 확인
+        "
+"passed","Thu Oct 24 21:58:58 KST 2024","Thu Oct 24 21:59:02 KST 2024","4244","tests.android","test_create_account","TestCreateAccount","","","test_002","
+        계정 생성 페이지 > 패스워드 문자 validation 확인
+
+        Test step
+        1. 문자 입력 전 letter validation label 캡쳐
+        2. 문자 ""a"" 입력
+        3. 2번 스텝 후 letter validation label 캡쳐
+
+        Expected result
+        두 캡쳐를 비교해서 달라진 것을 확인하여 색상이 변한 것을 확인
+        "
+"passed","Thu Oct 24 21:59:28 KST 2024","Thu Oct 24 21:59:34 KST 2024","6245","tests.android","test_create_account","TestCreateAccount","","","test_004","
+        계정 생성 페이지 > 패스워드 문자 validation 확인
+
+        Test step
+        1. 문자 입력 전 number, letter validation label 캡쳐
+        2. 문자 ""1a"" 입력
+        3. 2번 스텝 후 number, letter validation label 캡쳐
+
+        Expected result
+        두 캡쳐를 비교해서 달라진 것을 확인하여 색상이 변한 것을 확인
+        "

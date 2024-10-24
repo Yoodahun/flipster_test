@@ -1,0 +1,2 @@
+2024-10-24 21:58:42 [32mINFO[0m [MarketPage : click : line 97] - click_asset_tab 실행
+2024-10-24 21:58:46 [32mINFO[0m [LoginPage : click : line 97] - click_label_get_started 실행

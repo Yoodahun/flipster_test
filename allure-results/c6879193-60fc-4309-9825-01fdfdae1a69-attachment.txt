@@ -1,0 +1,3 @@
+2024-10-24 21:58:54 [32mINFO[0m [MarketPage : click : line 97] - click_asset_tab 실행
+2024-10-24 21:58:57 [32mINFO[0m [LoginPage : click : line 97] - click_label_get_started 실행
+2024-10-24 21:59:00 [32mINFO[0m [CreateAccountPage : input : line 84] - input_password 실행
